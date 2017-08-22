@@ -26,6 +26,7 @@
     "mongoose": "*",
     "passport": "*",
     "passport-http": "*",
-    "passport-local": "*"
+    "passport-local": "*",
+    "passport-facebook": "*"
   }
 }

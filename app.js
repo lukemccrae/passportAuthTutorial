@@ -8,8 +8,19 @@ var flash = require('connect-flash');
 var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var session = require('express-session');
+var FacebookStrategy = require('passport-facebook');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
+var oauth2lib = require('oauth20-provider');
+var oauth2 = new oauth2lib({
+    log: {
+        level: 2
+    }
+});
+
+
+
 
 mongoose.connect('mongodb://localhost/loginapp');
 var db = mongoose.connection;
@@ -19,6 +30,7 @@ var users = require('./routes/users');
 
 // Init App
 var app = express();
+
 
 // View Engine
 app.set('views', path.join(__dirname, 'views'));
@@ -33,6 +45,41 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(cookieParser());
+
+app.use(session({
+    secret: 'da illest developer',
+    resave: true,
+    saveUninitialized: true
+}))
+app.use(oauth2.inject());
+
+//app info
+var FACEBOOK_APP_ID = '694017184121381',
+    FACEBOOK_APP_SECRET = '2c5467e56067a82b2505bd8f0ed57cc4'
+
+//info for facebook call
+fbOpts = {
+    clientID: FACEBOOK_APP_ID,
+    clientSecret: FACEBOOK_APP_SECRET,
+    callbackURL: "http://localhost:3000/auth/facebook/callback",
+    profileFields: ['emails']
+}
+var fbCallback = function(accessToken, refreshToken, profile, cb) {
+    console.log(accessToken, refreshToken, profile, cb);
+}
+
+app.route('/dummy')
+    .get(passport.authenticate('facebook', {
+        scope: ['email']
+    }))
+
+app.route('/auth/facebook/callback')
+    .get(passport.authenticate('facebook', function(err, user, info) {
+        console.log(err, user, info);
+    }))
+
+//oauth call
+passport.use(new FacebookStrategy(fbOpts, fbCallback));
 
 // Set Static Folder
 app.use(express.static(path.join(__dirname, 'public')));

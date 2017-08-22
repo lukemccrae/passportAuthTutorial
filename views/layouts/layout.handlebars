@@ -15,12 +15,13 @@
               <li role="presentation"><a href="/users/logout">Logout</a></li>
             {{else}}
               <li role="presentation"><a href="/users/login">Login</a></li>
+              <li role="presentation"><a href="/dummy">Login Facebook</a></li>
               <li role="presentation"><a href="/users/register">Register</a></li>
             {{/if}}
           </ul>
         </nav>
         {{#if user}}
-        <h3 class="text-muted">Welcome {{user.name}}</h3>
+        <h3 class="text-muted">Welcome {{user.username}}</h3>
         {{else}}
         <h3 class="text-muted">LoginApp</h3>
         {{/if}}

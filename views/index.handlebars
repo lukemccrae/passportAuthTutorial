@@ -1,2 +1,8 @@
 <h2 class="page-header">Dashoard</h2>
-<p>Welcome to your Dashboard</p>
+{{#if user}}
+<form class="" method="post" enctype='multipart/form-data'>
+    <input class="file-upload-new" type="file" name="name" value="Choose File">
+    <br>
+    <input class="" type="submit" name="" value="Upload">
+</form>
+{{/if}}
